@@ -310,6 +310,10 @@ class sfWebResponse extends sfResponse
     }
   }
 
+  private function normalizeHeaderName_replace_callback($match) {
+	return('-' . strtoupper($match[1]));
+  }
+
   /**
    * Retrieves a normalized Header.
    *
@@ -319,7 +323,15 @@ class sfWebResponse extends sfResponse
    */
   protected function normalizeHeaderName($name)
   {
+    $new_val = preg_replace_callback('/\-(.)/', array($this, 'normalizeHeaderName_replace_callback'), strtr(ucfirst(strtolower($name)), '_', '-'));
+    return($new_val);
+/*
+    $old_val = preg_replace('/\-(.)/e', "'-'.strtoupper('\\1')", strtr(ucfirst(strtolower($name)), '_', '-'));
+    error_log("new_val = '$new_val'    old_val = '$old_val'");
+
+    This is the origional depecracted form of the function
     return preg_replace('/\-(.)/e', "'-'.strtoupper('\\1')", strtr(ucfirst(strtolower($name)), '_', '-'));
+*/
   }
 
   /**

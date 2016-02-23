@@ -356,6 +356,9 @@ class sfRouting
     return $this->routes;
   }
 
+  private function sfRouting_replace_callback($matches) {
+    return(urlencode($this->callback_params[$matches[1]]));
+  }
  /**
   * Generates a valid URLs for parameters.
   *
@@ -457,7 +460,12 @@ class sfRouting
 
     $params = sfToolkit::arrayDeepMerge($defaults, $params);
 
-    $real_url = preg_replace('/\:([^\/]+)/e', 'urlencode($params["\\1"])', $url);
+    $this->callback_params = $params;
+    $real_url = preg_replace_callback('/\:([^\/]+)/', array($this, 'sfRouting_replace_callback'), $url);
+    //FUNCTION DEPRECATED AND REPLACE BY preg_replace_callback $real_url = preg_replace('/\:([^\/]+)/e', 'urlencode($params["\\1"])', $url);
+    #$real_url = preg_replace('/\:([^\/]+)/e', 'urlencode($params["\\1"])', $url);
+    #error_log("New: $real_url_new");
+    #error_log("Old: $real_url");
 
     // we add all other params if *
     if (strpos($real_url, '*'))
