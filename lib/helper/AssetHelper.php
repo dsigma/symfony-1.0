@@ -351,6 +351,7 @@ function include_metas()
   foreach (sfContext::getInstance()->getResponse()->getMetas() as $name => $content)
   {
     if( substr($name, 0, 3) == "og:" ) {
+      /* Note: open graph tags requrie that the field name be 'property' instead of 'name'. */
       echo tag('meta', array('property' => $name, 'content' => $content))."\n";
     } else {
       echo tag('meta', array('name' => $name, 'content' => $content))."\n";
