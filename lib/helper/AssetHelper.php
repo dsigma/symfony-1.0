@@ -350,7 +350,11 @@ function include_metas()
 {
   foreach (sfContext::getInstance()->getResponse()->getMetas() as $name => $content)
   {
-    echo tag('meta', array('name' => $name, 'content' => $content))."\n";
+    if( substr($name, 0, 3) == "og:" ) {
+      echo tag('meta', array('property' => $name, 'content' => $content))."\n";
+    } else {
+      echo tag('meta', array('name' => $name, 'content' => $content))."\n";
+    }
   }
 }
 
